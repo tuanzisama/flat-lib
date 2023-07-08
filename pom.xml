@@ -177,9 +177,6 @@
     <profiles>
         <profile>
             <id>debug</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <properties>
                 <mvn.build.ver>${plugin.version}-DEBUG</mvn.build.ver>
                 <mvn.sign.phrase>deploy</mvn.sign.phrase>
@@ -187,18 +184,13 @@
         </profile>
         <profile>
             <id>release</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <properties>
                 <mvn.build.ver>${plugin.version}-RELEASE</mvn.build.ver>
                 <mvn.sign.phrase>install</mvn.sign.phrase>
             </properties>
         </profile>
     </profiles>
-
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/tuanzisama/flat-lib</url>
-        </repository>
-    </distributionManagement>
 </project>

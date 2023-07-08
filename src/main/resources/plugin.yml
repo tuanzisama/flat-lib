@@ -5,6 +5,3 @@ description: 'A development toolkit / library for Paper plugin developers.'
 authors:
   - "tuanzisama"
 api-version: 1.19
-
-depend:
-  - helper

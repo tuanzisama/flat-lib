@@ -38,3 +38,9 @@ jobs:
       run: mvn clean deploy -P release -s $GITHUB_WORKSPACE/settings.xml
       env:
         GITHUB_TOKEN: ${{ github.token }}
+
+    - name: capture build artifacts
+      uses: actions/upload-artifact@v3.0.0
+      with:
+        name: "FlatLib"
+        path: target/*.jar

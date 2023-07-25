@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class MaterialUtil {
     private static final Set<Material> airMaterials = Set.of(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR);
-    private static final Set<Material> unsafeMaterials = Set.of(Material.WATER, Material.LAVA, Material.VOID_AIR, Material.MAGMA_BLOCK, Material.FIRE, Material.SOUL_FIRE);
+    private static final Set<Material> unsafeMaterials = Set.of(Material.WATER, Material.LAVA, Material.VOID_AIR, Material.MAGMA_BLOCK, Material.FIRE, Material.SOUL_FIRE, Material.POWDER_SNOW);
 
     public static boolean isAir(Material material) {
         return airMaterials.contains(material);

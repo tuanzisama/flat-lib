@@ -5,8 +5,8 @@ import me.lucko.helper.promise.Promise;
 import me.lucko.helper.scheduler.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -63,7 +63,7 @@ public class CommandUtil {
      * @param delay        instruction execution delay
      * @param intervalUnit time unit
      */
-    public static void executeBatch(Player player, List<String> cmdList, int delay, @Nonnull TimeUnit intervalUnit) {
+    public static void executeBatch(Player player, List<String> cmdList, int delay, @NotNull TimeUnit intervalUnit) {
         AtomicInteger atomicInteger = new AtomicInteger(0);
 
         Scheduler scheduler = Schedulers.sync();

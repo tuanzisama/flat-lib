@@ -39,14 +39,14 @@ public class MessageHelper extends AbstractPluginVendor {
 
     private BaseComponent[] getRandomPrefix() {
         String prefix = getMessagePrefix().get(RandomUtils.nextInt(0, getMessagePrefix().size()));
-        BaseComponent[] baseComponents = new ComponentBuilder()
+        BaseComponent[] baseComponents = new ComponentBuilder("")
                 .append(MineDown.parse(prefix), ComponentBuilder.FormatRetention.NONE)
                 .create();
         return baseComponents;
     }
 
     private BaseComponent[] getContentWithPrefix(@NotNull BaseComponent... contentComponents) {
-        return new ComponentBuilder()
+        return new ComponentBuilder("")
                 .append(getRandomPrefix())
                 .append(contentComponents, ComponentBuilder.FormatRetention.NONE)
                 .create();
@@ -87,7 +87,7 @@ public class MessageHelper extends AbstractPluginVendor {
     }
 
     public <T extends Player> void sendActionBar(T player, BaseComponent... components) {
-        player.sendActionBar(components);
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, components);
     }
 
     public void printToConsole(Level level, String message) {

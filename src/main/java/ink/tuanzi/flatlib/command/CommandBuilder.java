@@ -8,7 +8,6 @@ import me.lucko.helper.command.Command;
 import me.lucko.helper.command.CommandInterruptException;
 import me.lucko.helper.command.context.CommandContext;
 import me.lucko.helper.command.functional.FunctionalCommandBuilder;
-import org.apache.logging.log4j.util.Strings;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -22,7 +21,7 @@ public class CommandBuilder<T extends CommandSender> {
     private FunctionalHandler<T> handler;
 
     @Getter
-    private String[] cmdAliases = Strings.EMPTY_ARRAY;
+    private String[] cmdAliases = new String[]{};
 
     public CommandBuilder<T> description(String var1) {
         luckoCmdBuilder.description(var1);

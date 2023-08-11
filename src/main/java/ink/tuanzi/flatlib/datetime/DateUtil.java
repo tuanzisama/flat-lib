@@ -1,6 +1,6 @@
 package ink.tuanzi.flatlib.datetime;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;

@@ -1,0 +1,59 @@
+damage-causes:
+  # Damage caused by being in the area when a block explodes.
+  BLOCK_EXPLOSION: "%1被%2炸死了"
+  # Damage caused when an entity contacts a block such as a Cactus, Dripstone (Stalagmite) or Berry Bush.
+  CONTACT: "%1撞上了%2"
+  # Damage caused when an entity is colliding with too many entities due to the maxEntityCramming game rule.
+  CRAMMING: "%1因被过度挤压而死"
+  # Custom damage.
+  CUSTOM: "N/A"
+  # Damage caused by a dragon breathing fire.
+  DRAGON_BREATH: "%1被龙息烤熟了"
+  # Damage caused by running out of air while in water
+  DROWNING: "%1淹死了"
+  # Damage caused when an entity that should be in water is not.
+  DRYOUT: "%1因脱水而死"
+  # Damage caused when an entity attacks another entity.
+  ENTITY_ATTACK: "%1死于%2"
+  # Damage caused by being in the area when an entity, such as a Creeper, explodes.
+  ENTITY_EXPLOSION: "%1被%2炸死了"
+  # Damage caused when an entity attacks another entity in a sweep attack.
+  ENTITY_SWEEP_ATTACK: "%1被%2触发横扫攻击致死"
+  # Damage caused when an entity falls a distance greater than 3 blocks
+  FALL: "%1落地过猛"
+  # Damage caused by being hit by a falling block which deals damage
+  FALLING_BLOCK: "%1被下落的方块压扁了"
+  # Damage caused by direct exposure to fire
+  FIRE: "%1浴火焚身"
+  # Damage caused due to burns caused by fire
+  FIRE_TICK: "%1被烧死了"
+  # Damage caused when an entity runs into a wall.
+  FLY_INTO_WALL: "%1感受到了动能"
+  # Damage caused from freezing.
+  FREEZE: "%1被冻死了"
+  # Damage caused when an entity steps on Material.MAGMA_BLOCK.
+  HOT_FLOOR: "%1发现地板是熔岩做的"
+  # Damage caused by direct exposure to lava
+  LAVA: "%1试图在熔岩里游泳"
+  # Damage caused by being struck by lightning
+  LIGHTNING: "%1被闪电击中"
+  # Damage caused by being hit by a damage potion or spell
+  MAGIC: "%1被魔法杀死了"
+  # Damage caused due to a snowman melting
+  MELTING: "%1融化了"
+  # Damage caused due to an ongoing poison effect
+  POISON: "%1中毒而死"
+  # Damage caused when attacked by a projectile.
+  PROJECTILE: "%1被%2射杀"
+  # Damage caused by starving due to having an empty hunger bar
+  STARVATION: "%1饿死了"
+  # Damage caused by being put in a block
+  SUFFOCATION: "%1在墙里窒息而亡"
+  # Damage caused by committing suicide.
+  SUICIDE: "%1自杀了"
+  # Damage caused in retaliation to another attack by the Thorns enchantment.
+  THORNS: "%1在试图伤害%2时被杀"
+  # Damage caused by falling into the void
+  VOID: "%1跌入虚空"
+  # Damage caused by Wither potion effect
+  WITHER: "%1凋零了"

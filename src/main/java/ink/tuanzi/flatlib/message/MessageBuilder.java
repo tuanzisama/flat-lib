@@ -6,7 +6,6 @@ import ink.tuanzi.flatlib.bukkit.ItemStackUtil;
 import ink.tuanzi.flatlib.message.vendor.InventoryViewer;
 import ink.tuanzi.flatlib.text.ColorUtil;
 import net.md_5.bungee.api.chat.*;
-import net.md_5.bungee.api.chat.hover.content.Item;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -31,7 +30,7 @@ import java.util.UUID;
  */
 public class MessageBuilder implements Cloneable {
 
-    private ComponentBuilder componentBuilder = new ComponentBuilder();
+    private ComponentBuilder componentBuilder = new ComponentBuilder("");
     private MessageLevel messageLevel = MessageLevel.NONE;
 
     public MessageBuilder() {
@@ -325,7 +324,8 @@ public class MessageBuilder implements Cloneable {
         };
 
         // Create the hover event
-        HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_ITEM, new Item(id, itemStack.getAmount(), ItemTag.ofNbt(itemJson)));
+//        HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_ITEM, new Item(id, itemStack.getAmount(), ItemTag.ofNbt(itemJson)));
+        HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents);
 
         /* And now we create the text component (this is the actual text that the player sees)
          * and set it's hover event to the item event */

@@ -8,7 +8,7 @@
     <artifactId>flat-lib</artifactId>
 
     <properties>
-        <plugin.version>1.0.0</plugin.version>
+        <plugin.version>1.0.1</plugin.version>
         <java.version>17</java.version>
         <package>ink.tuanzi.flatlib</package>
         <package.entry>FlatLib</package.entry>
@@ -124,9 +124,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.papermc.paper</groupId>
-            <artifactId>paper-api</artifactId>
-            <version>1.20.1-R0.1-SNAPSHOT</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.17-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -154,6 +154,12 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>com.github.tuanzisama.lucko-helper</groupId>
+            <artifactId>helper</artifactId>
+            <version>f60c1dfb4e</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>de.themoep</groupId>
             <artifactId>minedown</artifactId>
             <version>1.7.1-SNAPSHOT</version>
@@ -165,6 +171,18 @@
             <version>2.11.3</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>4.7.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <profiles>
@@ -172,7 +190,7 @@
             <id>debug</id>
             <properties>
                 <mvn.build.ver>${plugin.version}-DEBUG</mvn.build.ver>
-                <mvn.sign.phrase>deploy</mvn.sign.phrase>
+                <mvn.sign.phrase>install</mvn.sign.phrase>
             </properties>
         </profile>
         <profile>
@@ -181,8 +199,8 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <mvn.build.ver>${plugin.version}-RELEASE</mvn.build.ver>
-                <mvn.sign.phrase>install</mvn.sign.phrase>
+                <mvn.build.ver>${plugin.version}</mvn.build.ver>
+                <mvn.sign.phrase>deploy</mvn.sign.phrase>
             </properties>
         </profile>
     </profiles>

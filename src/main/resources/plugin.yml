@@ -4,4 +4,7 @@ version: ${project.version}
 description: 'A development toolkit / library for Paper plugin developers.'
 authors:
   - "tuanzisama"
-api-version: 1.19
+api-version: "1.17"
+
+load: STARTUP
+softdepend: [ ProtocolLib, Citizens, ViaVersion, NBTAPI ]

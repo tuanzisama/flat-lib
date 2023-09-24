@@ -25,12 +25,13 @@ import java.util.UUID;
 
 /**
  * 消息构造器
- * 使用链式表达式，简化 Minedown 的使用成本
- * Minedown docs: https://github.com/Phoenix616/MineDown
+ * 使用链式表达式，简化 MineDown 的使用成本
+ * <a href="https://github.com/Phoenix616/MineDown">MineDown docs</a>
  */
-public class MessageBuilder implements Cloneable {
+@SuppressWarnings("unchecked")
+public class MessageBuilder<T extends MessageBuilder<T>> {
 
-    private ComponentBuilder componentBuilder = new ComponentBuilder("");
+    protected final ComponentBuilder componentBuilder = new ComponentBuilder("");
     private MessageLevel messageLevel = MessageLevel.NONE;
 
     public MessageBuilder() {
@@ -50,9 +51,9 @@ public class MessageBuilder implements Cloneable {
      * @param str 文字
      * @return {@code this}.
      */
-    public MessageBuilder append(String str) {
+    public T append(String str) {
         append(str, true, ComponentBuilder.FormatRetention.NONE);
-        return this;
+        return (T) this;
     }
 
     /**
@@ -61,9 +62,9 @@ public class MessageBuilder implements Cloneable {
      * @param msgBuilder MessageBuilder 实例
      * @return {@code this}.
      */
-    public MessageBuilder appendBuilder(MessageBuilder msgBuilder) {
+    public T appendBuilder(T msgBuilder) {
         componentBuilder.append(msgBuilder.componentBuilder.create(), ComponentBuilder.FormatRetention.NONE);
-        return this;
+        return (T) this;
     }
 
     /**
@@ -73,13 +74,13 @@ public class MessageBuilder implements Cloneable {
      * @param format 是否转义颜色
      * @return {@code this}.
      */
-    public MessageBuilder appendText(String str, boolean format) {
+    public T appendText(String str, boolean format) {
         String content = str;
         if (format) {
             content = ColorUtil.parse(str);
         }
         append(content, false, ComponentBuilder.FormatRetention.NONE);
-        return this;
+        return (T) this;
     }
 
     /**
@@ -90,26 +91,26 @@ public class MessageBuilder implements Cloneable {
      * @param formatRetention 格式保留。简而言之，是否继承上一个文字组件的样式行为。
      * @return {@code this}.
      */
-    public MessageBuilder append(String str, boolean isMineDown, ComponentBuilder.FormatRetention formatRetention) {
+    public T append(String str, boolean isMineDown, ComponentBuilder.FormatRetention formatRetention) {
         if (isMineDown) {
             componentBuilder.append(MineDown.parse(messageLevel.getChatColor() + str), formatRetention);
         } else {
             componentBuilder.append(TextComponent.fromLegacyText(str), formatRetention);
         }
-        return this;
+        return (T) this;
     }
 
     /**
      * 添加一个生物实体
      *
      * @param entity 生物实体
-     * @param <T>    继承自 Entity 的实体
+     * @param <E>    继承自 Entity 的实体
      * @return {@code this}.
      */
-    public <T extends Entity> MessageBuilder appendEntity(T entity) {
+    public <E extends Entity> T appendEntity(E entity) {
         if (EntityType.PLAYER.equals(entity.getType())) {
             this.appendPlayer((Player) entity);
-            return this;
+            return (T) this;
         }
 
         String entityStr = "[&#FC8BAB&[{name}&#FC8BAB&]&r](show_entity={uuid}:{type} {name})"
@@ -117,22 +118,22 @@ public class MessageBuilder implements Cloneable {
                 .replace("{uuid}", entity.getUniqueId().toString())
                 .replace("{type}", entity.getType().name().toLowerCase());
         componentBuilder.append(MineDown.parse(entityStr), ComponentBuilder.FormatRetention.NONE);
-        return this;
+        return (T) this;
     }
 
     /**
      * 添加一个玩家
      *
      * @param player 玩家
-     * @param <T>    继承自 OfflinePlayer 的玩家
+     * @param <P>    继承自 OfflinePlayer 的玩家
      * @return {@code this}.
      */
-    public <T extends OfflinePlayer> MessageBuilder appendPlayer(T player) {
+    public <P extends OfflinePlayer> T appendPlayer(P player) {
         String entityStr = "[&#64FFDA&[{name}&#64FFDA&]&r](show_entity={uuid}:minecraft:player {name})"
                 .replace("{name}", Objects.requireNonNullElse(player.getName(), player.getName()))
                 .replace("{uuid}", player.getUniqueId().toString());
         componentBuilder.append(MineDown.parse(entityStr), ComponentBuilder.FormatRetention.NONE);
-        return this;
+        return (T) this;
     }
 
     /**
@@ -142,10 +143,10 @@ public class MessageBuilder implements Cloneable {
      * @param text  悬浮的文字
      * @return {@code this}.
      */
-    public MessageBuilder appendHover(String label, String text) {
+    public T appendHover(String label, String text) {
         String minedownStr = "[&r{label}](show_text={text})".replace("{label}", label).replace("{text}", text);
         append(minedownStr, true, ComponentBuilder.FormatRetention.NONE);
-        return this;
+        return (T) this;
     }
 
     /**
@@ -154,7 +155,7 @@ public class MessageBuilder implements Cloneable {
      * @param command 指令
      * @return {@code this}.
      */
-    public MessageBuilder appendCommand(String label, String command) {
+    public T appendCommand(String label, String command) {
         return appendCommand(label, command, "点击执行此指令");
     }
 
@@ -165,12 +166,12 @@ public class MessageBuilder implements Cloneable {
      * @param hoverText 悬浮在指令上的文字
      * @return {@code this}.
      */
-    public MessageBuilder appendCommand(String label, String command, String hoverText) {
+    public T appendCommand(String label, String command, String hoverText) {
         String cmd = command.startsWith("/") ? command : "/" + command;
 
         String minedownStr = "[&#FFA500&&r{label}&r](show_text={text} run_command={cmd})".replace("{label}", label).replace("{text}", hoverText).replace("{cmd}", cmd);
         append(minedownStr, true, ComponentBuilder.FormatRetention.NONE);
-        return this;
+        return (T) this;
     }
 
     /**
@@ -180,7 +181,7 @@ public class MessageBuilder implements Cloneable {
      * @param enabledViewer 启用库存预览
      * @return {@code this}.
      */
-    public MessageBuilder appendItemStack(ItemStack itemStack, boolean enabledViewer) {
+    public T appendItemStack(ItemStack itemStack, boolean enabledViewer) {
         String namespaceKey = itemStack.getType().toString();
 
 //        String displayName = LocaleManager.item.getValue(namespaceKey);
@@ -199,7 +200,7 @@ public class MessageBuilder implements Cloneable {
 
         BaseComponent[] tooltipComp = getItemTooltipComponent(String.format("&b[%s&b]&r", displayName), itemStack, namespaceKey.toLowerCase(), enabledViewer);
         componentBuilder.append(tooltipComp);
-        return this;
+        return (T) this;
     }
 
     /**
@@ -208,7 +209,7 @@ public class MessageBuilder implements Cloneable {
      * @param itemStack 物品堆
      * @return {@code this}.
      */
-    public MessageBuilder appendItemStack(ItemStack itemStack) {
+    public T appendItemStack(ItemStack itemStack) {
         return appendItemStack(itemStack, false);
     }
 
@@ -218,14 +219,14 @@ public class MessageBuilder implements Cloneable {
      * @param block 方块
      * @return {@code this}.
      */
-    public MessageBuilder appendBlock(Block block) {
+    public T appendBlock(Block block) {
         append(String.format("[&b[%s&b]](hover=x: %s, y: %s, z: %s, world: %s)", block.getX(), block.getY(), block.getZ(), block.getWorld().getName()), true, ComponentBuilder.FormatRetention.NONE).reset();
-        return this;
+        return (T) this;
     }
 
-    public MessageBuilder appendLink(String title, String url, String description) {
+    public T appendLink(String title, String url, String description) {
         append(String.format("[&b[%s&b]](open_url=%s show_text=%s)", title, url, description), true, ComponentBuilder.FormatRetention.NONE).reset();
-        return this;
+        return (T) this;
     }
 
     /**
@@ -233,9 +234,9 @@ public class MessageBuilder implements Cloneable {
      *
      * @return {@code this}.
      */
-    public MessageBuilder space() {
+    public T space() {
         this.reset().append(" ", true, ComponentBuilder.FormatRetention.NONE);
-        return this;
+        return (T) this;
     }
 
     /**
@@ -243,9 +244,9 @@ public class MessageBuilder implements Cloneable {
      *
      * @return {@code this}.
      */
-    public MessageBuilder enter() {
+    public T enter() {
         this.reset().append("\n", true, ComponentBuilder.FormatRetention.NONE);
-        return this;
+        return (T) this;
     }
 
     /**
@@ -253,9 +254,9 @@ public class MessageBuilder implements Cloneable {
      *
      * @return {@code this}.
      */
-    public MessageBuilder reset() {
+    public T reset() {
         append(String.valueOf(ChatColor.RESET), true, ComponentBuilder.FormatRetention.NONE);
-        return this;
+        return (T) this;
     }
 
     /**
@@ -263,9 +264,9 @@ public class MessageBuilder implements Cloneable {
      *
      * @return {@code this}.
      */
-    public MessageBuilder info() {
+    public T info() {
         messageLevel = MessageLevel.INFO;
-        return this;
+        return (T) this;
     }
 
     /**
@@ -273,9 +274,9 @@ public class MessageBuilder implements Cloneable {
      *
      * @return {@code this}.
      */
-    public MessageBuilder warn() {
+    public T warn() {
         messageLevel = MessageLevel.WARN;
-        return this;
+        return (T) this;
     }
 
     /**
@@ -283,18 +284,13 @@ public class MessageBuilder implements Cloneable {
      *
      * @return {@code this}.
      */
-    public MessageBuilder success() {
+    public T success() {
         messageLevel = MessageLevel.SUCCESS;
-        return this;
+        return (T) this;
     }
 
-    @Override
-    public MessageBuilder clone() {
-        try {
-            return (MessageBuilder) super.clone();
-        } catch (Exception e) {
-            return new MessageBuilder(this.componentBuilder.create());
-        }
+    public MessageBuilder<T> clone() {
+        return new MessageBuilder<>(this.componentBuilder.create());
     }
 
     /**
@@ -320,9 +316,8 @@ public class MessageBuilder implements Cloneable {
 
         // Prepare a BaseComponent array with the itemJson as a text component
         BaseComponent[] hoverEventComponents = new BaseComponent[]{
-                new TextComponent(itemJson) // The only element of the hover events basecomponents is the item json
+                new TextComponent(itemJson) // The only element of the hover events baseComponents is the item json
         };
-
         // Create the hover event
 //        HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_ITEM, new Item(id, itemStack.getAmount(), ItemTag.ofNbt(itemJson)));
         HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents);

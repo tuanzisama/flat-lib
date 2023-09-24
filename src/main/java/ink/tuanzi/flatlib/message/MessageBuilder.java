@@ -57,6 +57,17 @@ public class MessageBuilder<T extends MessageBuilder<T>> {
     }
 
     /**
+     * 追加 BaseComponents
+     *
+     * @param baseComponents BaseComponent
+     * @return {@code this}
+     */
+    public T appendBaseComponents(BaseComponent[] baseComponents) {
+        this.componentBuilder.append(baseComponents);
+        return (T) this;
+    }
+
+    /**
      * 追加其他 MessageBuilder
      *
      * @param msgBuilder MessageBuilder 实例

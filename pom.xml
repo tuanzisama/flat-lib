@@ -5,25 +5,26 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ink.tuanzi</groupId>
-    <artifactId>flat-lib</artifactId>
+    <artifactId>FlatLib</artifactId>
+    <version>${env.project.version}</version>
+    <packaging>jar</packaging>
 
     <properties>
-        <plugin.version>1.0.1</plugin.version>
+        <plugin.version>1.1.0</plugin.version>
         <java.version>17</java.version>
         <package>ink.tuanzi.flatlib</package>
         <package.entry>FlatLib</package.entry>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <api.path>${basedir}/api</api.path>
-        <build.name>${package.entry}-${project.version}</build.name>
-        <mvn.build.ver>${plugin.version}</mvn.build.ver>
+        <shade.pattern>${package}.shade</shade.pattern>
+        <build.name>${package.entry}</build.name>
+        <env.project.version>${plugin.version}</env.project.version>
     </properties>
 
-    <packaging>jar</packaging>
-    <version>${mvn.build.ver}</version>
 
     <build>
+        <finalName>${build.name}-${env.project.version}-original</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -51,7 +52,7 @@
                     <createTestSourcesJar>false</createTestSourcesJar>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
                     <shadedClassifierName>shade</shadedClassifierName>
-                    <finalName>${build.name}</finalName>
+                    <finalName>${build.name}-${env.project.version}</finalName>
                     <dependencyReducedPomLocation>
                         ${project.build.directory}/dependency-reduced-pom.xml
                     </dependencyReducedPomLocation>
@@ -147,12 +148,12 @@
             <version>1.18.28</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>me.lucko</groupId>
-            <artifactId>helper</artifactId>
-            <version>5.6.13</version>
-            <scope>compile</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>me.lucko</groupId>-->
+<!--            <artifactId>helper</artifactId>-->
+<!--            <version>5.6.13</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.github.tuanzisama.lucko-helper</groupId>
             <artifactId>helper</artifactId>
@@ -189,7 +190,7 @@
         <profile>
             <id>debug</id>
             <properties>
-                <mvn.build.ver>${plugin.version}-DEBUG</mvn.build.ver>
+                <env.project.version>${plugin.version}-debug</env.project.version>
                 <mvn.sign.phrase>install</mvn.sign.phrase>
             </properties>
         </profile>
@@ -199,7 +200,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <mvn.build.ver>${plugin.version}</mvn.build.ver>
+                <env.project.version>${plugin.version}</env.project.version>
                 <mvn.sign.phrase>deploy</mvn.sign.phrase>
             </properties>
         </profile>

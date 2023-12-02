@@ -12,42 +12,35 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
+import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 
 /**
  * 聊天栏输入工厂类
- * <code>
- * new ChatInputFactory(Bukkit.getPlayer("1"))
- * .handler(str -> {
- * // do somethings...
- * }).start().close();
- * </code>
  */
 public class ChatInputFactory {
-    private static final Map<Player, Predicate<String>> queueList = new HashMap<>();
-    private final Player player;
+    private BiPredicate<Player, String> callbackHandler = null;
+    private BiConsumer<Player, FailedReason> failedHandler = null;
     private final List<SingleSubscription<? extends Event>> eventHandlers = new ArrayList<>();
 
-    public ChatInputFactory(Player player) {
-        this.player = player;
-    }
-
-    public ChatInputFactory handler(Predicate<String> consumer) {
-        ChatInputFactory.queueList.put(player, consumer);
+    public ChatInputFactory handler(BiPredicate<Player, String> callbackHandler) {
+        this.callbackHandler = callbackHandler;
         return this;
     }
 
-    public ChatInputFactory start() {
+    public ChatInputFactory failed(BiConsumer<Player, FailedReason> failedHandler) {
+        this.failedHandler = failedHandler;
+        return this;
+    }
+
+    public void toPlayer(Player player) {
         this.eventHandlers.add(Events.subscribe(AsyncPlayerChatEvent.class)
-                .filter(e -> queueList.containsKey(e.getPlayer()))
+                .filter(e -> player.equals(e.getPlayer()))
                 .handler(e -> {
                     e.setCancelled(true);
                     Schedulers.sync().run(() -> {
-                        Predicate<String> predicate = queueList.get(e.getPlayer());
-                        boolean isSuccess = predicate.test(e.getMessage());
+                        boolean isSuccess = this.callbackHandler.test(player, e.getMessage());
                         if (isSuccess) {
                             this.close();
                         }
@@ -55,23 +48,32 @@ public class ChatInputFactory {
                 }));
 
         this.eventHandlers.add(Events.subscribe(PlayerQuitEvent.class)
-                .filter(e -> queueList.containsKey(e.getPlayer()))
-                .handler(e -> this.close()));
-
-        this.eventHandlers.add(Events.subscribe(PlayerCommandPreprocessEvent.class, EventPriority.HIGHEST)
-                .filter(e -> queueList.containsKey(e.getPlayer()))
+                .filter(e -> player.equals(e.getPlayer()))
                 .handler(e -> {
-                    MsgUtil.sendMessage(e.getPlayer(), "请先输入内容");
-                    e.setCancelled(true);
+                    this.close();
+                    if (this.failedHandler != null) {
+                        this.failedHandler.accept(player, FailedReason.PLAYER_QUIT);
+                    }
                 }));
 
-        return this;
+        this.eventHandlers.add(Events.subscribe(PlayerCommandPreprocessEvent.class, EventPriority.HIGHEST)
+                .filter(e -> player.equals(e.getPlayer()))
+                .handler(e -> {
+                    e.setCancelled(true);
+                    if (this.failedHandler != null) {
+                        this.failedHandler.accept(player, FailedReason.RUN_COMMAND);
+                    }
+                }));
     }
 
     public void close() {
-        ChatInputFactory.queueList.remove(player);
         for (SingleSubscription<? extends Event> eventHandler : this.eventHandlers) {
             eventHandler.unregister();
         }
+    }
+
+    public enum FailedReason {
+        RUN_COMMAND,
+        PLAYER_QUIT,
     }
 }
